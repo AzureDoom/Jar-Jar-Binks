@@ -1,35 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "jarjarbinks",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Jar Jar Binks Mod",
+  "description": "A Fabric revival of my old Jar Jar Binks mod.",
   "authors": [
-    "Me!"
+    "AzureDoom"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/azuredooms-jar-jar",
+    "sources": "https://github.com/AzureDoom/Jar-Jar-Binks"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "MIT",
+  "icon": "assets/jarjarbinks/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "mod.azure.jarjarbinks.JarJarBinksMod"
     ]
   },
-  "mixins": [
-    "modid.mixins.json"
-  ],
-
   "depends": {
     "fabricloader": ">=0.14.9",
     "fabric-api": "*",
-    "minecraft": "~1.19",
+    "minecraft": "~1.19.2",
+    "geckolib3": ">=3.1.7",
     "java": ">=17"
   },
   "suggests": {
