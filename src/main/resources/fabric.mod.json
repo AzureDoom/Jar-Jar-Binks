@@ -1,35 +1,35 @@
 {
-  "schemaVersion": 1,
-  "id": "jarjarbinks",
-  "version": "${version}",
-
-  "name": "Jar Jar Binks Mod",
-  "description": "A Fabric revival of my old Jar Jar Binks mod.",
-  "authors": [
-    "AzureDoom"
-  ],
-  "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/azuredooms-jar-jar",
-    "sources": "https://github.com/AzureDoom/Jar-Jar-Binks"
-  },
-
-  "license": "MIT",
-  "icon": "assets/jarjarbinks/icon.png",
-
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "mod.azure.jarjarbinks.JarJarBinksMod"
-    ]
-  },
-  "depends": {
-    "fabricloader": ">=0.14.9",
-    "fabric-api": "*",
-    "minecraft": "~1.19.2",
-    "geckolib3": ">=3.1.7",
-    "java": ">=17"
-  },
-  "suggests": {
-    "another-mod": "*"
-  }
+	"schemaVersion": 1,
+	"id": "jarjarbinks",
+	"version": "${version}",
+	"name": "Jar Jar Binks Mod",
+	"description": "A Fabric revival of my old Jar Jar Binks mod.",
+	"authors": [
+		"AzureDoom"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/azuredooms-jar-jar",
+		"sources": "https://github.com/AzureDoom/Jar-Jar-Binks"
+	},
+	"license": "MIT",
+	"icon": "assets/jarjarbinks/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"mod.azure.jarjarbinks.JarJarBinksMod"
+		],
+		"client": [
+			"mod.azure.jarjarbinks.JarJarBinksClientMod"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.14.9",
+		"fabric-api": "*",
+		"minecraft": "~1.19.2",
+		"geckolib3": ">=3.1.20",
+		"java": ">=17"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
 }
