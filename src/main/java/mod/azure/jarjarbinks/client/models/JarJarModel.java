@@ -38,7 +38,7 @@ public class JarJarModel extends AnimatedTickingGeoModel<JarJarBinksEntity> {
 		IBone Right_leg = this.getAnimationProcessor().getBone("rightleg");
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-		if (head != null) {
+		if (head != null && !entity.isUnderWater()) {
 			head.setRotationX(Vector3f.XP.rotation(extraData.headPitch * ((float) Math.PI / 180F)).i());
 			head.setRotationY(Vector3f.YP.rotation(extraData.netHeadYaw * ((float) Math.PI / 180F)).j());
 		}

@@ -15,10 +15,10 @@ public class ModEntities {
 	public static final EntityType<JarJarBinksEntity> JARJAR = Registry.register(Registry.ENTITY_TYPE,
 			new ResourceLocation(JarJarBinksMod.MODID, "jarjar"),
 			FabricEntityTypeBuilder.create(MobCategory.MONSTER, JarJarBinksEntity::new)
-					.dimensions(EntityDimensions.fixed(0.6f, 1.95F)).trackRangeBlocks(90).trackedUpdateRate(1).build());
+					.dimensions(EntityDimensions.scalable(0.6f, 1.95F)).trackRangeBlocks(90).trackedUpdateRate(1).build());
 
 	public static final EntityType<DarthJarJarEntity> DARTHJARJAR = Registry.register(Registry.ENTITY_TYPE,
 			new ResourceLocation(JarJarBinksMod.MODID, "darthbinks"),
 			FabricEntityTypeBuilder.create(MobCategory.MONSTER, DarthJarJarEntity::new)
-					.dimensions(EntityDimensions.fixed(0.6f, 1.95F)).trackRangeBlocks(90).trackedUpdateRate(1).build());
+					.dimensions(EntityDimensions.scalable(0.6f, 1.95F)).trackRangeBlocks(90).trackedUpdateRate(1).build());
 }
