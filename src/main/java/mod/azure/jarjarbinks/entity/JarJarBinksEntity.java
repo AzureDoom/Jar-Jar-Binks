@@ -75,6 +75,9 @@ public class JarJarBinksEntity extends PathfinderMob implements IAnimatable, IAn
 		this.moveControl = (this.wasEyeInWater || this.isInWater()) ? swimMoveControl : landMoveControl;
 		this.lookControl = (this.wasEyeInWater || this.isInWater()) ? swimLookControl : landLookControl;
 
+		if (this.tickCount % 10 == 0) {
+			this.refreshDimensions();
+		}
 		if (isEffectiveAi() && this.isInWater()) {
 			moveRelative(getSpeed(), movementInput);
 			move(MoverType.SELF, getDeltaMovement());
@@ -149,7 +152,7 @@ public class JarJarBinksEntity extends PathfinderMob implements IAnimatable, IAn
 	}
 
 	public <E extends IAnimatable> PlayState attack(AnimationEvent<E> event) {
-		if (this.swinging) {
+		if (this.swinging && this.isAggressive()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", true));
 			return PlayState.CONTINUE;
 		}
@@ -198,7 +201,7 @@ public class JarJarBinksEntity extends PathfinderMob implements IAnimatable, IAn
 
 	@Override
 	public EntityDimensions getDimensions(Pose pose) {
-		return this.isInWater() ? EntityDimensions.scalable(2.0f, 1.0f) : super.getDimensions(pose);
+		return this.wasEyeInWater ? EntityDimensions.scalable(1.5f, 0.8f) : super.getDimensions(pose);
 	}
 	
 	@Override
