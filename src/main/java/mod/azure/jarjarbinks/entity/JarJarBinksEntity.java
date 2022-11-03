@@ -46,14 +46,16 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class JarJarBinksEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
 
-	public AnimationFactory factory = new AnimationFactory(this);
+	public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	protected final GroundPathNavigation landNavigation = new GroundPathNavigation(this, level);
 	protected final AmphibiousNavigation swimNavigation = new AmphibiousNavigation(this, level);
 	protected final MoveControl landMoveControl = new MoveControl(this);
@@ -144,16 +146,16 @@ public class JarJarBinksEntity extends PathfinderMob implements IAnimatable, IAn
 
 	public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (this.wasEyeInWater) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("idle_water", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("idle_water", EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}
 
 	public <E extends IAnimatable> PlayState attack(AnimationEvent<E> event) {
 		if (this.swinging && this.isAggressive()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.CONTINUE;
