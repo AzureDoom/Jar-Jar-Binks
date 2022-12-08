@@ -2,6 +2,7 @@ package mod.azure.jarjarbinks.registry;
 
 import mod.azure.jarjarbinks.JarJarBinksMod;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
@@ -16,8 +17,8 @@ public class ModSoundEvents {
 	public static SoundEvent DARTHHURT = of("jarjar.uhohyousadidafuckywucky");
 
 	static SoundEvent of(String id) {
-		SoundEvent sound = new SoundEvent(new ResourceLocation(JarJarBinksMod.MODID, id));
-		Registry.register(Registry.SOUND_EVENT, new ResourceLocation(JarJarBinksMod.MODID, id), sound);
+		SoundEvent sound = SoundEvent.createVariableRangeEvent(new ResourceLocation(JarJarBinksMod.MODID, id));
+		Registry.register(BuiltInRegistries.SOUND_EVENT, new ResourceLocation(JarJarBinksMod.MODID, id), sound);
 		return sound;
 	}
 

@@ -1,17 +1,17 @@
 package mod.azure.jarjarbinks.client.models;
 
-import com.mojang.math.Vector3f;
-
 import mod.azure.jarjarbinks.JarJarBinksMod;
 import mod.azure.jarjarbinks.entity.DarthJarJarEntity;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
-public class DarthJarJarModel extends AnimatedTickingGeoModel<DarthJarJarEntity> {
+public class DarthJarJarModel extends GeoModel<DarthJarJarEntity> {
 
 	@Override
 	public ResourceLocation getModelResource(DarthJarJarEntity object) {
@@ -29,36 +29,38 @@ public class DarthJarJarModel extends AnimatedTickingGeoModel<DarthJarJarEntity>
 	}
 
 	@Override
-	public void setLivingAnimations(DarthJarJarEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
-		IBone head = this.getAnimationProcessor().getBone("head");
-		IBone Left_arm = this.getAnimationProcessor().getBone("leftarm");
-		IBone Right_arm = this.getAnimationProcessor().getBone("rightarm");
-		IBone Left_leg = this.getAnimationProcessor().getBone("leftleg");
-		IBone Right_leg = this.getAnimationProcessor().getBone("rightleg");
-
-		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-		if (head != null) {
-			head.setRotationX(Vector3f.XP.rotation(extraData.headPitch * ((float) Math.PI / 180F)).i());
-			head.setRotationY(Vector3f.YP.rotation(extraData.netHeadYaw * ((float) Math.PI / 180F)).j());
+	public void setCustomAnimations(DarthJarJarEntity animatable, long instanceId,
+			AnimationState<DarthJarJarEntity> animationState) {
+		super.setCustomAnimations(animatable, instanceId, animationState);
+		CoreGeoBone neck = getAnimationProcessor().getBone("head");
+		CoreGeoBone Left_arm = getAnimationProcessor().getBone("leftarm");
+		CoreGeoBone Right_arm = getAnimationProcessor().getBone("rightarm");
+		CoreGeoBone Left_leg = getAnimationProcessor().getBone("leftleg");
+		CoreGeoBone Right_leg = getAnimationProcessor().getBone("rightleg");
+		EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+		if (neck != null) {
+			neck.setRotX((entityData.headPitch() * (((float) Math.PI) / 180F)));
+			neck.setRotY((entityData.netHeadYaw() * (((float) Math.PI) / 180F)));
 		}
-		if (Left_arm != null) {
-			Left_arm.setRotationX(Vector3f.XP
-					.rotation(Mth.cos(entity.animationPosition * 0.6662F) * 2.0F * entity.animationSpeed * 0.5F).i());
+		if (Left_arm != null && !animatable.isAggressive()) {
+			Left_arm.setRotX(Mth.cos(animatable.animationPosition * 0.6662F) * 2.0F * animatable.animationSpeed * 0.5F);
 		}
-		if (Right_arm != null) {
-			Right_arm.setRotationX(Vector3f.XP.rotation(
-					Mth.cos(entity.animationPosition * 0.6662F + 3.1415927F) * 2.0F * entity.animationSpeed * 0.5F)
-					.i());
+		if (Right_arm != null && !animatable.isAggressive()) {
+			Right_arm.setRotX(Mth.cos(animatable.animationPosition * 0.6662F + 3.1415927F) * 2.0F
+					* animatable.animationSpeed * 0.5F);
 		}
 		if (Left_leg != null) {
-			Left_leg.setRotationX(Vector3f.XP.rotation(
-					Mth.cos(entity.animationPosition * 0.6662F + 3.1415927F) * 1.4F * entity.animationSpeed * 0.5F)
-					.i());
+			Left_leg.setRotX(Mth.cos(animatable.animationPosition * 0.6662F + 3.1415927F) * 1.4F
+					* animatable.animationSpeed * 0.5F);
 		}
 		if (Right_leg != null) {
-			Right_leg.setRotationX(Vector3f.XP
-					.rotation(Mth.cos(entity.animationPosition * 0.6662F) * 1.4F * entity.animationSpeed * 0.5F).i());
+			Right_leg
+					.setRotX(Mth.cos(animatable.animationPosition * 0.6662F) * 1.4F * animatable.animationSpeed * 0.5F);
 		}
+	}
+
+	@Override
+	public RenderType getRenderType(DarthJarJarEntity animatable, ResourceLocation texture) {
+		return RenderType.entityTranslucent(getTextureResource(animatable));
 	}
 }

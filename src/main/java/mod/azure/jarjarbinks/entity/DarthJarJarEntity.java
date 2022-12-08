@@ -12,20 +12,17 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.IAnimationTickable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class DarthJarJarEntity extends JarJarBinksEntity implements IAnimatable, IAnimationTickable {
+public class DarthJarJarEntity extends JarJarBinksEntity implements GeoEntity {
 
-	public AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 	public DarthJarJarEntity(EntityType<? extends JarJarBinksEntity> entityType, Level worldIn) {
 		super(entityType, worldIn);
@@ -43,35 +40,23 @@ public class DarthJarJarEntity extends JarJarBinksEntity implements IAnimatable,
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}
 
-	public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", EDefaultLoopTypes.LOOP));
-		return PlayState.CONTINUE;
-	}
-
-	public <E extends IAnimatable> PlayState attack(AnimationEvent<E> event) {
-		if (this.swinging) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", EDefaultLoopTypes.LOOP));
+	@Override
+	public void registerControllers(ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, "idle_controller", 0,  event -> {
+			event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
 			return PlayState.CONTINUE;
-		}
-		return PlayState.CONTINUE;
+		})).add(new AnimationController<>(this, "attack_controller", 0,  event -> {
+			if (this.swinging) {
+				event.getController().setAnimation(RawAnimation.begin().thenLoop("attack"));
+				return PlayState.CONTINUE;
+			}
+			return PlayState.CONTINUE;
+		}));
 	}
 
 	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(
-				new AnimationController<DarthJarJarEntity>(this, "idle_controller", 0, this::predicate));
-		data.addAnimationController(
-				new AnimationController<DarthJarJarEntity>(this, "idle_controller", 0, this::attack));
-	}
-
-	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
-	}
-
-	@Override
-	public int tickTimer() {
-		return this.tickCount;
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
 	}
 
 	@Override

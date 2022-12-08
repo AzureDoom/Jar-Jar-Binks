@@ -38,14 +38,15 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.layered() {
-		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-1.19.2:2022.08.14@zip")
-	}
+    mappings loom.officialMojangMappings()
+	//mappings( loom.layered() {
+		//officialMojangMappings()
+		//parchment("org.parchmentmc.data:parchment-1.19.2:2022.08.14@zip")
+	//})
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:3.1.35"
-	modImplementation ("com.terraformersmc:modmenu:4.0.6")
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabricVersion}"
+    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.19.3:4.0.0'
+	modImplementation ("com.terraformersmc:modmenu:5.0.0-alpha.4")
 }
 
 processResources {
@@ -94,7 +95,7 @@ if (file('key.properties').exists()) {
         	releaseType = "release"
         	changelogType = 'text'
         	changelog = file('CHANGELOG.txt')
-			addGameVersion("1.19.2")
+			addGameVersion("1.19.3")
 			addGameVersion("Fabric")
 			addGameVersion("Java 17")
 
@@ -124,10 +125,10 @@ if (file('key.properties').exists()) {
 		token = modrinthProp.getProperty('modrinthKey')
 		projectId = 'Zhqc8UeQ' 
 		versionNumber = project.mod_version 
-		versionName = 'Fabric 1.19.2'
+		versionName = 'Fabric 1.19.3'
 		uploadFile = remapJar 
 		changelog = rootProject.file("changelog.txt").text
-		gameVersions = ['1.19.2']
+		gameVersions = ['1.19.3']
 		loaders = ['fabric']
 		dependencies { 
         	required.project "geckolib"

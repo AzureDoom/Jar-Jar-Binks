@@ -42,20 +42,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.IAnimationTickable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class JarJarBinksEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
+public class JarJarBinksEntity extends PathfinderMob implements GeoEntity {
 
-	public AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	protected final GroundPathNavigation landNavigation = new GroundPathNavigation(this, level);
 	protected final AmphibiousNavigation swimNavigation = new AmphibiousNavigation(this, level);
 	protected final MoveControl landMoveControl = new MoveControl(this);
@@ -135,38 +132,26 @@ public class JarJarBinksEntity extends PathfinderMob implements IAnimatable, IAn
 	}
 
 	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
 	}
 
 	@Override
-	public int tickTimer() {
-		return this.tickCount;
-	}
-
-	public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if (this.wasEyeInWater) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("idle_water", EDefaultLoopTypes.LOOP));
+	public void registerControllers(ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, "idle_controller", 0, event -> {
+			if (this.wasEyeInWater) {
+				event.getController().setAnimation(RawAnimation.begin().thenLoop("idle_water"));
+				return PlayState.CONTINUE;
+			}
+			event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
 			return PlayState.CONTINUE;
-		}
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", EDefaultLoopTypes.LOOP));
-		return PlayState.CONTINUE;
-	}
-
-	public <E extends IAnimatable> PlayState attack(AnimationEvent<E> event) {
-		if (this.swinging && this.isAggressive()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", EDefaultLoopTypes.LOOP));
+		})).add(new AnimationController<>(this, "attack_controller", 0, event -> {
+			if (this.swinging && this.isAggressive()) {
+				event.getController().setAnimation(RawAnimation.begin().thenLoop("attack"));
+				return PlayState.CONTINUE;
+			}
 			return PlayState.CONTINUE;
-		}
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(
-				new AnimationController<JarJarBinksEntity>(this, "idle_controller", 0, this::predicate));
-		data.addAnimationController(
-				new AnimationController<JarJarBinksEntity>(this, "attack_controller", 0, this::attack));
+		}));
 	}
 
 	@Override
@@ -205,7 +190,7 @@ public class JarJarBinksEntity extends PathfinderMob implements IAnimatable, IAn
 	public EntityDimensions getDimensions(Pose pose) {
 		return this.wasEyeInWater ? EntityDimensions.scalable(1.5f, 0.8f) : super.getDimensions(pose);
 	}
-	
+
 	@Override
 	public void refreshDimensions() {
 		super.refreshDimensions();
