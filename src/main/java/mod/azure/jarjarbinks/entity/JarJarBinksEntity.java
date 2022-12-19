@@ -45,6 +45,7 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.Animation.LoopType;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
@@ -139,18 +140,14 @@ public class JarJarBinksEntity extends PathfinderMob implements GeoEntity {
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
 		controllers.add(new AnimationController<>(this, "idle_controller", 0, event -> {
-			if (this.wasEyeInWater) {
-				event.getController().setAnimation(RawAnimation.begin().thenLoop("idle_water"));
-				return PlayState.CONTINUE;
-			}
-			event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
-			return PlayState.CONTINUE;
+			if (this.wasEyeInWater)
+				return event.setAndContinue(RawAnimation.begin().thenLoop("idle_water"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
 		})).add(new AnimationController<>(this, "attack_controller", 0, event -> {
-			if (this.swinging && this.isAggressive()) {
-				event.getController().setAnimation(RawAnimation.begin().thenLoop("attack"));
-				return PlayState.CONTINUE;
-			}
-			return PlayState.CONTINUE;
+			if (this.swinging)
+				return event.setAndContinue(RawAnimation.begin().then("attack", LoopType.PLAY_ONCE));
+
+			return PlayState.STOP;
 		}));
 	}
 

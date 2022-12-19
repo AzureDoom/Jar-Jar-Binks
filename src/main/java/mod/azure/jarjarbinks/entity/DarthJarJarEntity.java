@@ -15,6 +15,7 @@ import net.minecraft.world.level.material.FluidState;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.Animation.LoopType;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
@@ -42,15 +43,13 @@ public class DarthJarJarEntity extends JarJarBinksEntity implements GeoEntity {
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "idle_controller", 0,  event -> {
-			event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
-			return PlayState.CONTINUE;
-		})).add(new AnimationController<>(this, "attack_controller", 0,  event -> {
-			if (this.swinging) {
-				event.getController().setAnimation(RawAnimation.begin().thenLoop("attack"));
-				return PlayState.CONTINUE;
-			}
-			return PlayState.CONTINUE;
+		controllers.add(new AnimationController<>(this, "idle_controller", 0, event -> {
+			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+		})).add(new AnimationController<>(this, "attack_controller", 0, event -> {
+			if (this.swinging)
+				return event.setAndContinue(RawAnimation.begin().then("attack", LoopType.PLAY_ONCE));
+
+			return PlayState.STOP;
 		}));
 	}
 
