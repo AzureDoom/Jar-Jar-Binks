@@ -1,3 +1,3 @@
-v.1.0.5
+v.1.0.6
 
-- Fixes Attacking Animation.
+- Convert from Geckolib to AzureLib

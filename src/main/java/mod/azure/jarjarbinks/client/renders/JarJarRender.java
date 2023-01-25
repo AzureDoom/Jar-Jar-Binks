@@ -3,7 +3,7 @@ package mod.azure.jarjarbinks.client.renders;
 import mod.azure.jarjarbinks.client.models.JarJarModel;
 import mod.azure.jarjarbinks.entity.JarJarBinksEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import mod.azure.azurelib.renderer.GeoEntityRenderer;
 
 public class JarJarRender extends GeoEntityRenderer<JarJarBinksEntity> {
 
