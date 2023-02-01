@@ -1,3 +1,4 @@
-v.1.0.6
+v.1.0.7
 
-- Convert from Geckolib to AzureLib
+- Moved spawn egg to lib spawn egg. 
+- Updated required lib version. 
