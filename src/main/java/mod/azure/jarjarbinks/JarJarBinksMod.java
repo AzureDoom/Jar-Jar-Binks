@@ -1,8 +1,8 @@
 package mod.azure.jarjarbinks;
 
+import mod.azure.azurelib.items.AzureSpawnEgg;
 import mod.azure.jarjarbinks.entity.DarthJarJarEntity;
 import mod.azure.jarjarbinks.entity.JarJarBinksEntity;
-import mod.azure.jarjarbinks.entity.JarJarSpawnEggItem;
 import mod.azure.jarjarbinks.registry.ModEntities;
 import mod.azure.jarjarbinks.registry.ModEntitySpawning;
 import mod.azure.jarjarbinks.registry.ModSoundEvents;
@@ -18,8 +18,8 @@ public class JarJarBinksMod implements ModInitializer {
 
 	public static ModEntities ENTITIES;
 	public static ModSoundEvents SOUNDS;
-	public static final JarJarSpawnEggItem JARJAR_SPAWN_EGG = new JarJarSpawnEggItem(ModEntities.JARJAR);
-	public static final JarJarSpawnEggItem DARTHJARJAR_SPAWN_EGG = new JarJarSpawnEggItem(ModEntities.DARTHJARJAR);
+	public static final AzureSpawnEgg JARJAR_SPAWN_EGG = new AzureSpawnEgg(ModEntities.JARJAR, 16753920, 16777215);
+	public static final AzureSpawnEgg DARTHJARJAR_SPAWN_EGG = new AzureSpawnEgg(ModEntities.DARTHJARJAR, 16753920, 16777215);
 	public static final String MODID = "jarjarbinks";
 
 	@Override

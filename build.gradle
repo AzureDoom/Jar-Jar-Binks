@@ -41,7 +41,7 @@ dependencies {
     mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabricVersion}"
-  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.3:1.0.0'
+  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.3:1.0.2'
 	modImplementation ("com.terraformersmc:modmenu:5.0.1")
 }
 
